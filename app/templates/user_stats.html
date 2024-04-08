@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Statistics</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for adding padding to the top line */
+        .header {
+            padding-top: 20px;
+        }
+        /* Custom CSS for horizontally aligning charts */
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        /* Custom CSS for adjusting chart width */
+        .chart {
+            width: 48%; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+<!-- Header section with added padding -->
+<div class="container-fluid bg-dark text-white py-2 header">
+    <div class="row">
+        <div class="col">
+            <!-- Title -->
+            <h1>User's Dashboard</h1>
+        </div>
+        <div class="col text-right">
+            <!-- Navigation buttons -->
+            <form action="/users/{{ user_id }}/userDashboard/books" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Books</button>
+            </form>
+            <form action="/users/{{ user_id }}/userDashboard/myBooks" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">My Books</button>
+            </form>
+            <form action="/users/{{ user_id }}/userDashboard/stats" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Stats</button>
+            </form>
+            <form action="/" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Main content section -->
+<div class="container mt-4">
+    <!-- Bar Graph and Pie Chart Container -->
+    <div class="chart-container">
+        <!-- Bar Graph -->
+        <div class="chart">
+            <h2>Books Read per Section</h2>
+            <img src="data:image/png;base64,{{ bar_chart_url }}" alt="Bar Graph" class="img-fluid">
+        </div>
+        <!-- Pie Chart -->
+        <div class="chart">
+            <h2>Section Distribution of All Books</h2>
+            <img src="data:image/png;base64,{{ pie_chart_url }}" alt="Pie Chart" class="img-fluid">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+

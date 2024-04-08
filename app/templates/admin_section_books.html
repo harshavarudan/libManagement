@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'admin_dashboard.html' %}
+<body>
+<!-- Main content section -->
+<div class="container mt-4">
+    <!-- Check if there are any books available -->
+    {% if books %}
+        <!-- Loop through each book -->
+        {% for book in books %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text">Author: {{ book.author }}</p>
+                    <p class="card-text">Section Name: {{ book.section_name }}</p>
+                    {% if book.user_issued_to %}
+                        <p class="card-text">User Issued To: <b>{{ book.user_issued_to }}</b></p>
+                        <!-- Display revoke button if a user is assigned to the book -->
+                        <a href="/admins/{{ admin_id }}/sections/{{ section_id }}/books/{{ book.id }}/revokeBook/{{ book.user_requested_book_id }}" class="btn btn-dark" id="revokeBtn{{ book.id }}">Revoke</a>
+                    {% else %}
+                        <p class="card-text">Not assigned to anyone</p>
+                    {% endif %}
+                    <!-- Display edit button -->
+
+                    {% if edit_book_id!=book.id %}
+                    <a href="?edit_book_id={{ book.id }}" class="btn btn-warning" id="editBtn{{ book.id }}">Edit</a>
+                        <a href="/admins/{{ admin_id }}/sections/{{ section_id }}/books/{{ book.id }}/deleteBook" class="btn btn-danger">Delete Book</a>
+                    {% else %}
+                        <div class="card mb-3 mt-3">
+                            <div class="card-body">
+                                <form action="/admins/{{ admin_id }}/sections/{{ section_id }}/books/{{ book.id }}/updateBook" method="post">
+                                    <div class="form-group">
+                                        <label for="title">Book Title</label>
+                                        <input type="text" class="form-control" id="title" name="title" value="{{ book.title }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="author">Book Author</label>
+                                        <input type="text" class="form-control" id="author" name="author" value="{{ book.author }}" required>
+                                    </div>
+                                    <div class="form-group">
+
+                                        <label for="section_name">Section Name</label>
+                                        <input type="text" class="form-control" id="section_name" name="section_name" value="{{ section_name }}" readonly>
+                                    </div>
+                                    <button type="submit" class="btn btn-success mx-2">Update Book</button>
+                                    <a href="/admins/{{ admin_id }}/sections/{{ section_id }}/books" class="btn btn-danger">Cancel Update</a>
+                                </form>
+
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+
+        {% endfor %}
+        <!-- Check if add_book is True -->
+    {% else %}
+        <!-- If no books are available in the current section -->
+        <div class="alert alert-info" role="alert">
+            There are no books available in this current section. Would you like to add some?
+        </div>
+    {% endif %}
+    {% if not add_new_book %}
+        <a href="?add_books=true" class="btn btn-success">New Book</a>
+    {% endif %}
+    {% if add_new_book %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <form  action="books" method="post">
+                    <div class="form-group">
+                        <label for="title">Book Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" class="form-control" id="author" name="author" required>
+                    </div>
+                    <div class="form-group">
+
+                        <label for="section_name">Section Name</label>
+                        <input type="text" class="form-control" id="section_name" name="section_name" value="{{ section_name }}" readonly>
+                    </div>
+                    <!-- Display success message if it exists -->
+                    {% if success %}
+                        <div class="alert alert-success" role="alert">
+                            {{ success }}
+                        </div>
+                    {% endif %}
+                    <!-- Display error message if it exists -->
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-success mx-2">Add Book</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin's Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for adding padding to the top line */
+        .header {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header section with added padding -->
+<div class="container-fluid bg-dark text-white py-2 header">
+    <div class="row">
+        <div class="col">
+            <!-- Title -->
+            <h1>Admin's Dashboard</h1>
+        </div>
+        <div class="col text-right">
+            <!-- Navigation buttons -->
+            <a href="#" class="btn btn-success mx-2">Stats</a>
+            <a href="/admins/{{ admin_id }}/sections/" class="btn btn-success mx-2">Sections</a>
+            <a href="/admins/{{ admin_id }}/requests/" class="btn btn-success mx-2">Requests</a>
+            <a href="/" class="btn btn-success mx-2">Logout</a>
+        </div>
+    </div>
+</div>
+<!-- Main content section -->
+<div class="container mt-4">
+    <!-- Your dashboard content goes here -->
+</div>
+</body>
+</html>

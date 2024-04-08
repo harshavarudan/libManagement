@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User's Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for adding padding to the top line */
+        .header {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header section with added padding -->
+<div class="container-fluid bg-dark text-white py-2 header">
+    <div class="row">
+        <div class="col">
+            <!-- Title -->
+            <h1>{{ user_id }}'s Dashboard</h1>
+        </div>
+        <div class="col text-right">
+            <!-- Navigation buttons -->
+            <form action="/users/{{ user_id }}/userDashboard/books" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Books</button>
+            </form>
+            <form action="/users/{{ user_id }}/userDashboard/myBooks" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">My Books</button>
+            </form>
+            <form action="/users/{{ user_id }}/userDashboard/stats" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Stats</button>
+            </form>
+            <form action="/" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Main content section -->
+<div class="container mt-4">
+    <!-- Current section -->
+    <h2>Current</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Section</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Rows for Current section -->
+        {% for book in my_current_books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.section_name }}</td>
+                <td>
+                    <form action="/users/{{ user_id }}/userDashboard/myBooks/return" method="post">
+                        <input type="hidden" name="book_id" value="{{ book.id }}">
+                        <button type="submit" class="btn btn-primary">Return</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Completed section -->
+    <h2>Completed</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Section</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Rows for Completed section -->
+        {% for book in my_completed_books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.section_name }}</td>
+                <td><button class="btn btn-primary">View</button></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+
+
+

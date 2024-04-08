@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'admin_dashboard.html' %}
+<body>
+<!-- Main content section -->
+<div class="container mt-4">
+    <!-- Check if there are any requests available -->
+    {% if requests %}
+        <h2>Requests</h2>
+        <!-- Loop through each request -->
+        {% for request in requests %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ request.book_title }}</h5>
+                    <p class="card-text">Requested by: {{ request.user_name }}</p>
+                    <!-- View book button -->
+                    <button class="btn btn-primary" id="viewBtn{{ request.id }}" data-toggle="collapse" data-target="#bookDetails{{ request.id }}">View Book</button>
+                    <!-- Reject button -->
+                    <form action="/reject/{{ request.id }}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                    <!-- Approve button -->
+                    <form action="/approve/{{ request.id }}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Book details collapse -->
+            <div id="bookDetails{{ request.id }}" class="collapse">
+                <div class="card-body">
+                    <ul>
+                        <li>User: {{ request.user_name }}</li>
+                        <li>Days requested: {{ request.days_requested }}</li>
+                        <li>Book: {{ request.book_title }}</li>
+                        <li>Section: {{ request.section_name }}</li>
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <!-- If no requests are available -->
+        <div class="alert alert-info" role="alert">
+            There are no requests available.
+        </div>
+    {% endif %}
+    <!-- Check if there are any book statuses available -->
+    {% if book_statuses %}
+        <h2>Book Statuses</h2>
+        <!-- Loop through each book status -->
+        {% for books in book_statuses %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ books.book_title }}</h5>
+                    <p class="card-text">Assigned to: {{ books.user_name }}</p>
+                    <!-- View book button -->
+                    <button class="btn btn-primary" id="viewBtn{{ books.id }}" data-toggle="collapse" data-target="#bookDetails{{ books.id }}">View Book</button>
+                    <!-- Revoke button -->
+                    <form action="/revoke/{{ books.id }}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Revoke</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Book details collapse -->
+            <div id="bookDetails{{ books.id }}" class="collapse">
+                <div class="card-body">
+                    <ul>
+                        <li>User: {{ books.user_name }}</li>
+                        <li>Days requested: {{ books.days_requested }}</li>
+                        <li>Book: {{ books.book_title }}</li>
+                        <li>Section: {{ books.section_name }}</li>
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <!-- If no book statuses are available -->
+        <div class="alert alert-info" role="alert">
+            There are no book statuses available.
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>

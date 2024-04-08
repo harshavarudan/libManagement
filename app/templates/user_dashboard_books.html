@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User's Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for adding padding to the top line */
+        .header {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header section with added padding -->
+<div class="container-fluid bg-dark text-white py-2 header">
+    <div class="row">
+        <div class="col">
+            <!-- Title -->
+            <h1>{{ user_id }}'s Dashboard</h1>
+        </div>
+        <div class="col text-right">
+            <!-- Navigation buttons -->
+            <form action="/users/{{ user_id }}/userDashboard/books" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Books</button>
+            </form>
+            <form action="/users/{{ user_id }}/userDashboard/myBooks" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">My Books</button>
+            </form>
+            <form action="/users/{{ user_id }}/userDashboard/stats" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Stats</button>
+            </form>
+            <form action="/" method="get" class="d-inline">
+                <button type="submit" class="btn btn-success mx-2">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Filter form -->
+<div class="container mt-4">
+    <form action="/users/{{ user_id }}/userDashboard/books" method="get">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="filterBy">Filter By</label>
+                <select class="custom-select" id="filterBy" name="filter_by">
+                    <option value="">Choose...</option>
+                    <option value="author">Author</option>
+                    <option value="section">Section</option>
+                    <option value="title">Title</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="searchTerm">Search Term</label>
+                <input type="text" class="form-control" id="searchTerm" placeholder="Search term" name="search_term">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="filterButton">Filter</label>
+                <button class="btn btn-primary btn-block" type="submit" id="filterButton">Filter</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Main content section -->
+<div class="container mt-4">
+    <!-- Book list -->
+    <form action="/users/{{ user_id }}/userDashboard/books/request" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>Section</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Loop through books -->
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.section_name }}</td>
+                    <td>
+                        {% if book.requested %}
+                            <button class="btn btn-primary" disabled>Requested</button>
+                        {% else %}
+                            <form action="/users/{{ user_id }}/userDashboard/books/request" method="post" class="d-inline">
+                                <input type="hidden" name="book_id" value="{{ book.id }}">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="days_requested" placeholder="Days" required>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary">Request</button>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
