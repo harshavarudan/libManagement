@@ -1,6 +1,6 @@
 import sqlite3
 
-DB_PATH = "/Users/harshavardhan/library.db"
+DB_PATH = "library.db"
 
 
 def handle_user_registration(username, password):

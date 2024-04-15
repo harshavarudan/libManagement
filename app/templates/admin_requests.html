@@ -14,28 +14,28 @@
                     <h5 class="card-title">{{ request.book_title }}</h5>
                     <p class="card-text">Requested by: {{ request.user_name }}</p>
                     <!-- View book button -->
-                    <button class="btn btn-primary" id="viewBtn{{ request.id }}" data-toggle="collapse" data-target="#bookDetails{{ request.id }}">View Book</button>
+                    {% if view_request_id!=request.id %}
+                    <a href="?view_request={{ request.id }}" class="btn btn-warning" id="editBtn{{ request.id }}">View Book Request</a>
+                    {% else %}
+                            <div id="bookDetails{{ request.id }}" >
+                            <div class="card-body">
+                                <ul>
+                                    <li>Users name: {{ request.user_name }}</li>
+                                    <li>Days requested for: {{ request.days_requested }}</li>
+                                    <li>Book: {{ request.book_title }}</li>
+                                    <li>Section: {{ request.section_name }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
                     <!-- Reject button -->
-                    <form action="/reject/{{ request.id }}" method="post" style="display: inline;">
-                        <button type="submit" class="btn btn-danger">Reject</button>
-                    </form>
+                    <a href="approve_request/{{ request.id }}?approve=false" class="btn btn-danger">Reject</a>
                     <!-- Approve button -->
-                    <form action="/approve/{{ request.id }}" method="post" style="display: inline;">
-                        <button type="submit" class="btn btn-success">Approve</button>
-                    </form>
+                    <a href="approve_request/{{ request.id }}?approve=true" class="btn btn-info">Approve</a>
                 </div>
             </div>
             <!-- Book details collapse -->
-            <div id="bookDetails{{ request.id }}" class="collapse">
-                <div class="card-body">
-                    <ul>
-                        <li>User: {{ request.user_name }}</li>
-                        <li>Days requested: {{ request.days_requested }}</li>
-                        <li>Book: {{ request.book_title }}</li>
-                        <li>Section: {{ request.section_name }}</li>
-                    </ul>
-                </div>
-            </div>
+
         {% endfor %}
     {% else %}
         <!-- If no requests are available -->
@@ -44,33 +44,63 @@
         </div>
     {% endif %}
     <!-- Check if there are any book statuses available -->
-    {% if book_statuses %}
-        <h2>Book Statuses</h2>
+    <!-- New Line -->
+    <br>
+
+    {% if book_statuses_list %}
+        <h2>Current Book Statuses</h2>
         <!-- Loop through each book status -->
-        {% for books in book_statuses %}
+        {% for books in book_statuses_list %}
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">{{ books.book_title }}</h5>
-                    <p class="card-text">Assigned to: {{ books.user_name }}</p>
+                    <!-- Display the user the book is assigned to and bolds it -->
+                    <p class="card-text">Assigned to: <strong>{{ books.user_issued_to }}</strong></p>
                     <!-- View book button -->
-                    <button class="btn btn-primary" id="viewBtn{{ books.id }}" data-toggle="collapse" data-target="#bookDetails{{ books.id }}">View Book</button>
+                    {% if view_book_status_id!=books.id %}
+                    <a href="?view_book_status={{ books.id }}" class="btn btn-warning" id="editBtn{{ books.id }}">View Book</a>
+                    {% else %}
+                        <div id="bookDetails{{ books.id }}" class="card mt-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Book Details</h5>
+                                <ul class="list-unstyled">
+                                    <li><strong>Book Title:</strong> {{ books.book_title }}</li>
+                                    <li><strong>Author:</strong> {{ books.author_name }}</li>
+                                    <li><strong>Section:</strong> {{ books.section_name }}</li>
+                                    <li><strong>Issued to:</strong> {{ books.user_issued_to }}</li>
+                                    <li><strong>Date Issued:</strong> {{ books.date_issued }}</li>
+                                    <li><strong>Days Requested For:</strong> {{ books.days_requested_for }}</li>
+                                    {% if books.days_remaining < 0 %}
+                                        <li class="text-danger">
+                                            <strong>Expired:</strong>
+                                            {{- "Expired " + (-books.days_remaining|string) + " days ago" }}
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <strong>Days Remaining:</strong> {{ books.days_remaining }}
+                                        </li>
+                                    {% endif %}
+                                    <li><strong>Due on:</strong> {{ books.due_on }}</li>
+                                    <li class="{% if books.is_due == 'true' %}text-danger{% endif %}">
+                                        <strong>Status:</strong>
+                                        {% if books.is_due == 'true' %}
+                                            EXPIRED
+                                        {% else %}
+                                            Not yet due
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    {% endif %}
                     <!-- Revoke button -->
-                    <form action="/revoke/{{ books.id }}" method="post" style="display: inline;">
+                    <form action="revokeBook/{{ books.id }}" method="get" style="display: inline;">
                         <button type="submit" class="btn btn-danger">Revoke</button>
                     </form>
                 </div>
             </div>
-            <!-- Book details collapse -->
-            <div id="bookDetails{{ books.id }}" class="collapse">
-                <div class="card-body">
-                    <ul>
-                        <li>User: {{ books.user_name }}</li>
-                        <li>Days requested: {{ books.days_requested }}</li>
-                        <li>Book: {{ books.book_title }}</li>
-                        <li>Section: {{ books.section_name }}</li>
-                    </ul>
-                </div>
-            </div>
+
         {% endfor %}
     {% else %}
         <!-- If no book statuses are available -->

@@ -1,6 +1,7 @@
 import sqlite3
 
 from flask import Blueprint, render_template, request, url_for, redirect
+from flask_login import login_user
 
 from app.services import handle_user_registration
 
@@ -76,6 +77,7 @@ def librarian_login():
         return render_template('admin_login.html', error='Please enter both username and password')
     successful,users_id = admin_login(name, password)
     if successful:
+        #login_user(users_id)
         dashboard = "/admins/" + str(users_id) + "/adminDashboard"
         return redirect(dashboard)
 
